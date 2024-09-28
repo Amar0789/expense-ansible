@@ -10,7 +10,7 @@
     ansible.builtin.pip:
      name:
      - PyMysql
-    executable: pip3.9
+     executable: pip3.9
   
   - name: To install sql server
     ansible.builtin.package:
