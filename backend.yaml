@@ -44,5 +44,15 @@
     args:
      chdir: /app
      
+  - name: To copy the service files
+    ansible.builtin.copy:
+     src: backend.service
+     dest: /etc/systemd/system/backend.service
 
+  - name: To install pymysql
+    ansible.builtin.pip:
+     name: 
+     - PyMySQL
+     - cryptography
+     executable: pip3.9
   
