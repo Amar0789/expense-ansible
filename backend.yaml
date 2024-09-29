@@ -1,67 +1,66 @@
-- name: To configure backend server
+- name: configure backend server
   hosts: backend
   become: yes
   vars:
-   password: ExpenseApp@1
-   host_name: mysql.app789.site 
-
+    mysql_root_password: ExpenseApp@1
+    login_host: mysql.app789.site
   tasks:
-  - name: to disable default node js
+  - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
 
-  - name: to enable node js
+  - name: enable nodejs 20
     ansible.builtin.command: dnf module enable nodejs:20 -y
 
-  - name: To install node js
+  - name: install nodejs
     ansible.builtin.package:
-     name: "{{ item }}"
-     state: present
-    loop: 
+      name: "{{ item }}"
+      state: present
+    loop:
     - nodejs
     - mysql
 
-  - name: To create expense user
+  - name: create expense user
     ansible.builtin.user:
-     name: Expense
+      name: expense
 
-  - name: To create adirectory
+  - name: create app directory
     ansible.builtin.file:
-     path: /app
-     state: directory
-  
-  - name: To donload the code
+      path: /app
+      state: directory
+
+  - name: download the backend code
     ansible.builtin.get_url:
-     url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-     dest: /tmp/backend.zip
+      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+      dest: /tmp/backend.zip
 
-  - name: To unzip the code
+  - name: extract the code
     ansible.builtin.unarchive:
-     src: /tmp/backend.zip
-     dest: /app
-     remote_src: yes
+      src: /tmp/backend.zip #by default ansible thinks this is in ansible server
+      dest: /app
+      remote_src: yes
 
-  - name: To install dependencies
+  - name: install dependencies
     ansible.builtin.command: npm install
     args:
-     chdir: /app
+      chdir: /app
 
-  - name: To copy backend.service
+  - name: copy backend service
     ansible.builtin.copy:
-     src: backend.service
-     dest: /etc/systemd/system/backend.service
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
 
   - name: ansible to install pymysql
     ansible.builtin.pip:
-     name:
+      name:
       - PyMySQL
       - cryptography
-     executable: pip3.9
+      executable: pip3.9
 
   - name: import mysql data
     community.mysql.mysql_db:
       login_user: root
-      login_password: "{{ password }}"
-      login_host: "{{ host_name }}"
+      login_password: "{{ mysql_root_password }}"
+      login_host: "{{ login_host }}"
       target: /app/schema/backend.sql
       name: all
       state: import

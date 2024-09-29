@@ -1,47 +1,38 @@
-- name: To configure backend servers
+- name: mysql configuration
   hosts: mysql
   become: yes
   vars:
-   password: ExpenseApp@1
-   host_name: mysql.app789.site
-
+    mysql_root_password: ExpenseApp@1
+    login_host: mysql.app789.site
   tasks:
-  - name: To install pymysql
+  - name: ansible to install pymysql
     ansible.builtin.pip:
-     name:
-     - PyMysql
-     executable: pip3.9
-  
-  - name: To install sql server
+      name:
+      - PyMySQL
+      executable: pip3.9
+  - name: install MySQL Server
     ansible.builtin.package:
-     name: mysql-server
-     state: present
+      name: mysql-server
+      state: present
 
-  - name: To install sql server
+  - name: start mysql server
     ansible.builtin.service:
-     name: mysqld
-     state: started
-     enabled: yes
+      name: mysqld
+      state: started
+      enabled: yes
 
-  - name: to connect to db
+  - name: connect mysql server
     community.mysql.mysql_info:
-     login_user: root
-     login_password: "{{ password }}"
-     login_host: "{{ host_name }}"
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      login_host: "{{ login_host }}"
     ignore_errors: true
-    register: my_sql_info
+    register: mysql_info
 
   - name: print mysql info
     ansible.builtin.debug:
-     msg: "{{ my_sql_info }}"
-    
-  - name: to set root password
-    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ password }}"
-    when: my_sql_info.failed is true
-    
+      msg: "{{ mysql_info }}"
 
-
-
-
-    
-  
+  - name: setup MySQL root password
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ mysql_root_password }}"
+    when: mysql_info.failed is true
