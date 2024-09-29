@@ -9,5 +9,5 @@
   - name: To install Pymysql
     ansible.buitin.pip:
      name: 
-     - PyMysql
+     - PyMySQL
      executable: pip3.9
