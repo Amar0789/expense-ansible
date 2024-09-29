@@ -41,8 +41,8 @@
 
   - name: To install the code
     ansible.builtin.command: npm install
-     args:
-      chdir: /app
+    args:
+     chdir: /app
      
 
   
