@@ -11,3 +11,9 @@
      name: 
      - PyMySQL
      executable: pip3.9
+
+  - name: To install sql server
+    ansible.builtin.package:
+     name: mysql-server
+     state: present
+     
