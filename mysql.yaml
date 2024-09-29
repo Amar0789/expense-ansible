@@ -16,4 +16,8 @@
     ansible.builtin.package:
      name: mysql-server
      state: present
-     
+
+  - name: To install sql server
+    ansible.builtin.service:
+     name: mysql-server
+     state: started
