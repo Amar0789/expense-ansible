@@ -22,3 +22,21 @@
      name: mysqld
      state: started
      enabled: yes
+
+  - name: To connect to sql server
+    community.mysql.mysql_info:
+     login_user: "root"
+     login_passord: "{{ password }}"
+     login_host: "{{ host_address }}"
+     ignore_erroes: true
+     register: mysql_info
+
+  - name: To print the sql info
+    ansible.builtin.package:
+     msg: "{{ mysql_info }}"
+
+  # - name: To change the default root password
+  #   ansible.builtin.service:
+  #    name: mysqld
+  #    state: started
+  #    enabled: yes
