@@ -32,7 +32,7 @@
     register: mysql_info
 
   - name: To print the sql info
-    ansible.builtin.package:
+    ansible.builtin.debug:
      msg: "{{ mysql_info }}"
 
   # - name: To change the default root password
