@@ -60,7 +60,7 @@
   - name: To import data from database
     community.mysql.mysql_db:
      login_user: "root"
-     login_passord: "{{ password }}"
+     login_password: "{{ password }}"
      login_host: "{{ host_address }}"
      target: /app/schema/backend.sql
      name: all
