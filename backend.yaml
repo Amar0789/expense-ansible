@@ -6,6 +6,5 @@
 
   tasks:
   - name: To disable default nodejs
-    ansible.builtin.service:
-     name: nodejs
-     enabled: no
+    ansible.builtin.command: dnf disable nodejs -y
+    
